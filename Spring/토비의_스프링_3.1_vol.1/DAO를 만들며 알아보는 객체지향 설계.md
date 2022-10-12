@@ -381,7 +381,7 @@ public static void main(String[] args) throws ClassNotFoundException, SQLExcepti
 
 비로소 UserDao에서 DB커넥션에 대한 관심사항을 분리하였다. 이리하여 UserDao의 수정 없이 DB연결 기능을 확장해서 사용할 수 있게 되었다!
 
-![최종 구조](1.png)
+![최종 구조](https://user-images.githubusercontent.com/108508730/195374533-b37b832a-eab7-4330-b0bd-b6be323b2952.png)
 
 최종 구조
 
