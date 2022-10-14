@@ -42,7 +42,7 @@ DaoFactory는 DI 컨테이너로써 UserDao를 만드는 시점에서 생성자�
 
 UserDao는 DaoFactory에게 전달받은 런타임 의존관계를 갖는 오브젝트를 connectionMaker에 저장해둔다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7894bdf9-2c00-41d3-a55d-ae91930ef98b/Untitled.png)
+![image](https://user-images.githubusercontent.com/108508730/195784169-4fdeff89-027d-425d-b8b2-684572ec96a0.png)
 
 위의 사진은 이런 객체에 대한 런타임 의존관계 주입과 그것으로 발생하는 런타임 사용 의존관계의 모습을 보여 준다.
 
@@ -153,7 +153,7 @@ UserDao에 의존관계 검색을 적용해보면 위와 같이 스프링의 IoC
     
     아래는 CountingConnectionMaker를 적용한 뒤의 런타임 오브젝트 의존관계 그림이다.
     
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/57b7a918-828c-482f-b59b-0ffd520d44ca/Untitled.png)
+    ![image](https://user-images.githubusercontent.com/108508730/195784094-ce4006d6-711b-4617-8935-e9fc1c96cd69.png)
     
 
 ---
