@@ -141,7 +141,7 @@ getBean() 메소드는 ApplicationContext가 관리하는 오브젝트를 요청
 
 애플리케이션 컨택스트는 애플리케이션에서 IoC를 적용해서 관리할 모든 오브젝트에 대한 생성과 관계설정을 담당한다. 대신 ApplicationContext에는 직접 오브젝트를 생성하고 관계를 맺어주는 코드가 없고, 그런 생성정보와 연관관계 정보를 별도의 설정정보를 통해 얻는다.
 
-![Untitled](%E1%84%8C%E1%85%A6%E1%84%8B%E1%85%A5%E1%84%8B%E1%85%B4%20%E1%84%8B%E1%85%A7%E1%86%A8%E1%84%8C%E1%85%A5%E1%86%AB(IoC)%2083304681d7934e42972d9e34ccda105c/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/108508730/195782835-ec67c060-7a37-4131-9b39-69196abadd68.png)
 
 @Configuration이 붙은 DaoFactory는 이 애플리케이션 컨텍스트가 활용하는 IoC 설정정보다. 내부적으로는 애플리케이션 컨텍스트가 DaoFactory의 userDao( ) 메소드 를 호출해서 오브젝트를 가져온 것을 클라이언트가 getBean()으로 요청할 때 전달해준다.
 
