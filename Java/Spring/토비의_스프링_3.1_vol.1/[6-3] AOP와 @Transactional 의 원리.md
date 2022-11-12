@@ -1,6 +1,6 @@
 ### 참조
 
-- 토비의 스프링 vol.1 462p~556p- 
+- 토비의 스프링 vol.1 462p~556p
 - @Transactional 의 원리
     - [https://hwannny.tistory.com/98](https://hwannny.tistory.com/98)
 
