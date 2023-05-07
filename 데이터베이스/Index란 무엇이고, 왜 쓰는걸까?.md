@@ -216,7 +216,7 @@ SELECT id FROM device WHERE id = 1;
 hash table을 사용하여 구현한 index를 말한다.
 
 - **장점**
-    - 시간 복잡도가 **O(1)**이다. (매우 빠르다)
+    - 시간 복잡도가 `O(1)`이다. (매우 빠르다)
 - **단점**
     - rehashing에 대한 부담이 있다.
         - hash table은 array로 저장, 데이터가 쌓이다 보면 더 큰 사이즈로 바꿔줘야하는데 이를 rehashing이라고 한다.
