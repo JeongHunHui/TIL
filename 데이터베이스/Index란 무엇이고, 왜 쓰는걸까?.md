@@ -2,7 +2,7 @@
 
 추가적인 쓰기 작업과 저장 공간을 활용하여 데이터베이스의 검색 속도를 향상시키기 위한 데이터 구조이다.
 
-### Index를 왜 써야할 까?
+### Index를 왜 써야할까?
 
 **PLAYER**
 
@@ -99,6 +99,7 @@ CREATE TABLE player(
 | 5 | … |
 | 5 | … |
 | 5 | … |
+| 7 | … |
 | 12 | … |
 
 **2번 인덱스 (team_id, backnumber 복합 인덱스)**
@@ -117,25 +118,9 @@ CREATE TABLE player(
 | 7 | 1 | … |
 | 12 | 1 | … |
 
-**player 테이블**
-
-| name | team_id | backnumber |
-| --- | --- | --- |
-| name1 | 1 | 1 |
-| name2 | 1 | 2 |
-| name3 | 2 | 1 |
-| name4 | 2 | 2 |
-| name5 | 3 | 1 |
-| name6 | 4 | 1 |
-| name7 | 5 | 1 |
-| name8 | 5 | 2 |
-| name9 | 5 | 3 |
-| name10 | 7 | 1 |
-| name11 | 12 | 1 |
-
 index는 기본적으로 index에 해당하는 attribute의 값과, 해당 attribute가 속한 튜플의 위치를 가리키는 포인터를 가지고 있고, attribute의 값으로 정렬되어 있다.
 
-2번 인덱스 같은 복합 인덱스의 경우는 인덱스의 순서에 따라 team_id 기준으로 정렬 후 같은 team_id를 가진 튜플들은 backnumber 기준으로 정렬되어 있다. (그래서 index를 거는 순서도 중요하다.)
+2번 인덱스 같은 복합 인덱스의 경우는 인덱스의 순서에 따라 team_id 기준으로 정렬 후 같은 team_id를 가진 튜플들은 backnumber 기준으로 정렬되어 있다.
 
 ```sql
 WHERE team_id = 5 AND backnumber = 3
@@ -171,23 +156,23 @@ WHERE team_id = 5 AND backnumber = 3
 
 → 두 인덱스는 다른 테이블에 직접 접근하는 **디스크 I/O 작업** 횟수의 차이가 있고, 당연히 위의 사례에서는 2번 인덱스(복합 인덱스)를 사용하는 것이 더 효과적이다.
 
-** 쿼리가 어떤 인덱스를 사용하는 지 알 수 있는 방법**
+*** 쿼리가 어떤 인덱스를 사용하는 지 알 수 있는 방법**
 
 - Explain 쿼리를 실행하여 key 속성으로 확인할 수 있다. 아래의 경우는 PK로 생성되는 index를 사용했음을 나타낸다.
     
-    ![image](https://user-images.githubusercontent.com/108508730/236664988-15852db1-2646-4a15-afe8-1edcbc4db039.png)
+    ![image](https://github.com/JeongHunHui/TIL/assets/108508730/54226b7f-cbcb-4349-9847-9dce9145f72b)
     
 - 원래는 Optimizer가 적절한 index를 골라주지만, 가끔 이상한 인덱스를 고를 때가 있다.
 - `USE INDEX (인덱스_이름)`(인덱스 권장), `FORCE INDEX (인덱스_이름)` (인덱스 강제), `IGNORE INDEX (인덱스_이름)` (인덱스 제외) 등 을 사용하여 원하는 인덱스를 사용하도록 통제할 수 있다.
 
-### 그러면 Index를 많이 만들면 좋을까?
+### 그러면 Index를 많이 만들면 좋은건가요?
 
 테이블에 쓰기연산(insert, update, delete)을 실행할 때 마다 index도 변경되므로 index를 적용하게 되면 쓰기 성능이 저하될 수 있다. 또한, 포인터 같은 데이터를 저장하기 때문에 추가적인 저장 공간을 차지한다.
 
 또한, 아래의 경우는 index를 사용하는 것 보다 **full scan**이 더 좋을 수 있다.
 
 1. table에 데이터가 조금 있는 경우 (몇 십, 몇 백건 정도)
-2. 조회하려는 데이터가 테이블의 상당 부분을 차지하는 경우
+2. 조회하려는 데이터가 테이블의 상당 부분을 차지하는 경우 → 찾아보기
 3. 데이터가 너무 많아서 index의 크기가 너무 큰 경우
 
 그러므로 무작정 index를 만들기 보다는, 상황을 고려하여 신중히 만들어야 한다.
@@ -199,12 +184,12 @@ WHERE team_id = 5 AND backnumber = 3
 예를 들어, 아래의 쿼리와 같이 id 컬럼으로 조건을 걸었고, 조회하는 데이터도 id라면, index에 있는 데이터로 조회하는 데이터를 모두 cover하게 된다.
 
 ```sql
-SELECT id FROM device WHERE id = 1;
+SELECT id, name FROM device WHERE id = 1;
 ```
 
 이 경우, explain query를 사용했을 때 Extra에 “Using index” 라는 값이 나온다.
 
-![image](https://user-images.githubusercontent.com/108508730/236665002-08462f6d-0e13-4c64-a400-094313614fc8.png)
+![image](https://github.com/JeongHunHui/TIL/assets/108508730/116328a6-ecaf-48a7-b020-0d0f6901347c)
 
 - **장점**
     - 본 테이블까지 가지 않고 index 안에 필요한 모든 데이터가 있기 때문에 조회 성능이 향상된다.
@@ -222,4 +207,4 @@ hash table을 사용하여 구현한 index를 말한다.
         - hash table은 array로 저장, 데이터가 쌓이다 보면 더 큰 사이즈로 바꿔줘야하는데 이를 rehashing이라고 한다.
     - **동일한지 동일하지 않은지에 대한 비교**만 가능, **범위를 통한 비교**나 **정렬**을 할 때는 **사용이 불가능** 하다.
     - 복합 인덱스의 경우 index의 전체 attribute에 대한 조회만 가능하다.
-        - Index(a,b)면 B-Tree 인덱스의 경우는 a에 대한 조회에만 사용 가능하다. 하지만 hash 인덱스는 a와 b에 대한 조회에만 사용 가능하다.
+        - Index(a,b)면 B-Tree 인덱스의 경우는 a에 대한 조회에도 사용 가능하다. 하지만 hash 인덱스는 a와 b에 대한 조회에만 사용 가능하다.
